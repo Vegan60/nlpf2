@@ -65,4 +65,12 @@ def user_login(request):
     else:
         return render(request, 'website/login.html', {})
 
+def intranet(request):
+    return render(request, 'intranet/home.html', locals())
+
+def clients(request):
+    return HttpResponse("Clients page")
+
+def appointments(request):
+    return HttpResponse("Appointments page")
 
