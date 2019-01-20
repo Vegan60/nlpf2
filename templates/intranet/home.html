@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Bob Graffiti Intranet{% endblock %}</title>
+</head>
+<body>
+  <main>
+    {% block content %}
+    <h1>Bob Graffiti Intranet</h1>
+    <a href="{% url 'website:clients' %}">Clients</a>
+    <a href="{% url 'website:appointments' %}">Appointments</a>
+    {% endblock %}
+  </main>
+</body>
+</html>

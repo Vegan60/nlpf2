@@ -2,6 +2,7 @@ from django.db import models
 import os
 from uuid import uuid4
 from django.utils.deconstruct import deconstructible
+from django.contrib.auth.models import User
 
 @deconstructible
 class PathAndRename(object):
@@ -35,3 +36,9 @@ class Ticket(models.Model):
     meting_time_end = models.TextField(null=True, blank=True)
     admin_comment = models.TextField(null=True, blank=True)
 
+class UserProfileInfo(models.Model):
+  user = models.OneToOneField(User,on_delete=models.CASCADE)
+  portfolio_site = models.URLField(blank=True)
+  profile_pic = models.ImageField(upload_to='profile_pics',blank=True)
+  def __str__(self):
+    return self.user.username
