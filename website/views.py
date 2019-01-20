@@ -2,14 +2,19 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from website.forms import UserForm,UserProfileInfoForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import *
 from django.urls import reverse
+from website.models import UserProfileInfo
 #from django.views.generic import TemplateView
 #from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.views import generic
+from django.contrib.auth.models import User
+
+
 
 
 
@@ -73,4 +78,24 @@ def clients(request):
 
 def appointments(request):
     return HttpResponse("Appointments page")
+
+def clientblock(request):
+    username_b = request.POST.get('username')
+    user = User.objects.get(username=username_b)
+    user.is_active = False
+    user.save(update_fields=['is_active'])
+    return redirect('/website/intranet/clients')
+
+def clientunblock(request):
+    username_b = request.POST.get('username')
+    user = User.objects.get(username=username_b)
+    user.is_active = True
+    user.save(update_fields=['is_active'])
+    return redirect('/website/intranet/clients')
+
+
+class ClientListView(generic.ListView):
+    model = User
+    context_object_name = 'clients'
+    template_name = 'intranet/clients.html'
 
