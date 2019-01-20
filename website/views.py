@@ -60,9 +60,12 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request,user)
-                return HttpResponseRedirect(reverse('index'))
+                if (username == 'bob') :
+                    return redirect('/website/intranet')
+                else :
+                    return HttpResponseRedirect(reverse('index'))
             else:
-                return HttpResponse("Your account was inactive.")
+                return HttpResponse("Your account is inactive.")
         else:
             print("Someone tried to login and failed.")
             print("They used username: {} and password: {}".format(username,password))
@@ -70,27 +73,32 @@ def user_login(request):
     else:
         return render(request, 'website/login.html', {})
 
+@login_required
 def intranet(request):
     return render(request, 'intranet/home.html', locals())
 
+@login_required
 def clients(request):
     return HttpResponse("Clients page")
 
+@login_required
 def appointments(request):
     return HttpResponse("Appointments page")
 
+@login_required
 def clientblock(request):
     username_b = request.POST.get('username')
-    user = User.objects.get(username=username_b)
-    user.is_active = False
-    user.save(update_fields=['is_active'])
+    user_c = User.objects.get(username=username_b)
+    user_c.is_active = False
+    user_c.save(update_fields=['is_active'])
     return redirect('/website/intranet/clients')
 
+@login_required
 def clientunblock(request):
     username_b = request.POST.get('username')
-    user = User.objects.get(username=username_b)
-    user.is_active = True
-    user.save(update_fields=['is_active'])
+    user_c = User.objects.get(username=username_b)
+    user_c.is_active = True
+    user_c.save(update_fields=['is_active'])
     return redirect('/website/intranet/clients')
 
 
