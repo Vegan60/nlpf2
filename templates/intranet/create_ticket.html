@@ -1,0 +1,16 @@
+{% extends 'website/base.html' %}
+{% block body_block %}
+  <div class="container">
+    <div class="jumbotron">
+      <h1>Create a new ticket</h1>
+        <form enctype="multipart/form-data" method="POST" action="{% url 'website:create_ticket' %}" >
+          {% csrf_token %}
+          {# A more "HTML" way of creating the login form#}
+            <table>
+                {{ ticket_form.as_table }}
+            </table>
+            <input type="submit" name="" value="Create Ticket">
+        </form>
+    </div>
+  </div>
+{% endblock %}
