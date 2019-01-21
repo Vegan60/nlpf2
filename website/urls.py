@@ -14,8 +14,9 @@ urlpatterns=[
     url(r'^register/$',views.register,name='register'),
     url(r'^user_login/$',views.user_login,name='user_login'),
     url(r'^create_ticket/$', views.user_create_ticket, name='create_ticket'),
-    #url(r'^ticket_success/$', name='success'),
-    path('intranet', views.intranet, name='intranet'),
-    path('intranet/clients', views.clients, name='clients'),
+    path('intranet/', views.intranet, name='intranet'),
+    path('intranet/clients', views.ClientListView.as_view(), name='clients'),
+    path('intranet/clientblock', views.clientblock, name='clientblock'),
+    path('intranet/clientunblock', views.clientunblock, name='clientunblock'),
     path('intranet/appointments', views.appointments, name='appointments'),
 ]

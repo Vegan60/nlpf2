@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Bob Graffiti Intranet{% endblock %}</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+  <body>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <ul class="nav navbar-nav">
+          <li><a class="navbar-link" href="{% url 'website:clients' %}">Clients</a></li>  
+          <li><a class="navbar-link" href="{% url 'website:appointments' %}">Appointments</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% endif %}
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+    {% block body_block %}
+  {% if clients %}
+  <h1>Clients</h1>
+   <ul>
+    {% for client in clients %}
+    {% if client.is_active and client.username != 'bob' %}
+    <form method="post" action="{% url 'website:clientblock' %}">
+        {% csrf_token %}
+      <li>
+        <a></a>{{ client.username }}</a> ({{client.email}}) <input type="submit" name="" value="Block">
+        <input type="hidden" name="username" value={{ client.username }}>
+      </li>
+      {% endif %} 
+</form>    
+    {% endfor %}
+  </ul>
+  <h1>Blacklisted Clients</h1>
+   <ul>
+    {% for client in clients %}
+    {% if client.is_active == False and client.username != 'bob' %}
+    <form method="post" action="{% url 'website:clientunblock' %}">
+        {% csrf_token %}
+      <li>
+        <a></a>{{ client.username }}</a> ({{client.email}}) <input type="submit" name="" value="Unblock">
+        <input type="hidden" name="username" value={{ client.username }}>
+      </li>
+      {% endif %} 
+</form>    
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no clients registered.</p>
+  {% endif %}       
+    {% endblock %}
+    </div>
+  </body>
+</html>

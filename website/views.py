@@ -2,15 +2,21 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from django.shortcuts import render
+
+from django.shortcuts import render, redirect
 from website.forms import UserForm,UserProfileInfoForm, AddNewTicketForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import *
 from django.urls import reverse
-import datetime
+from website.models import UserProfileInfo
 #from django.views.generic import TemplateView
 #from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.views import generic
+from django.contrib.auth.models import User
+import datetime
+
+
 
 
 
@@ -56,9 +62,12 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request,user)
-                return HttpResponseRedirect(reverse('index'))
+                if (username == 'bob') :
+                    return redirect('/website/intranet')
+                else :
+                    return HttpResponseRedirect(reverse('index'))
             else:
-                return HttpResponse("Your account was inactive.")
+                return HttpResponse("Your account is inactive.")
         else:
             print("Someone tried to login and failed.")
             print("They used username: {} and password: {}".format(username,password))
@@ -66,6 +75,7 @@ def user_login(request):
     else:
         return render(request, 'website/login.html', {})
 
+@login_required
 def intranet(request):
     return render(request, 'intranet/home.html', locals())
 
@@ -96,6 +106,29 @@ def user_create_ticket(request):
 def clients(request):
     return HttpResponse("Clients page")
 
+@login_required
 def appointments(request):
     return HttpResponse("Appointments page")
+
+@login_required
+def clientblock(request):
+    username_b = request.POST.get('username')
+    user_c = User.objects.get(username=username_b)
+    user_c.is_active = False
+    user_c.save(update_fields=['is_active'])
+    return redirect('/website/intranet/clients')
+
+@login_required
+def clientunblock(request):
+    username_b = request.POST.get('username')
+    user_c = User.objects.get(username=username_b)
+    user_c.is_active = True
+    user_c.save(update_fields=['is_active'])
+    return redirect('/website/intranet/clients')
+
+
+class ClientListView(generic.ListView):
+    model = User
+    context_object_name = 'clients'
+    template_name = 'intranet/clients.html'
 
