@@ -1,0 +1,27 @@
+{% extends 'website/base.html' %}
+{% block body_block %}
+  <h1 class="display-4">Tickets</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Adress</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for wai in waiting%}
+            <tr>
+                <td>{{ wai.id}}</td>
+                <td>{{ wai.adress}}</td>
+                <td>
+                    <form class="d-inline" action="answer/{{ wai.id }}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Resolve" class="btn btn-warning">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

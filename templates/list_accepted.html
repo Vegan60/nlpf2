@@ -1,0 +1,21 @@
+{% extends 'website/base.html' %}
+{% block body_block %}
+  <h1 class="display-4">Tickets</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Adress</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for acc in accepted%}
+            <tr>
+                <td>{{ acc.id}}</td>
+                <td>{{ acc.adress}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

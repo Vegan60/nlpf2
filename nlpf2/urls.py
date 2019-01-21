@@ -21,6 +21,12 @@ from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('list_accepted', views.list_accepted, name='list_accepted'),
+    path('list_denied', views.list_denied, name='list_denied'),
+    path('list_waiting', views.list_waiting, name='list_waiting'),
+    url(r'^answer/(?P<id>[0-9]+)$', views.answer, name='answer'),
+    url(r'^update/accept/(?P<id>[0-9]+)$', views.update_accept, name='accept'),
+    url(r'^update/denie/(?P<id>[0-9]+)$', views.update_denie, name='denie'),
     url(r'^$',views.index,name='index'),
     url(r'^special/',views.special,name='special'),
     url(r'^website/',include('website.urls')),

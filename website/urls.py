@@ -18,4 +18,7 @@ urlpatterns=[
     path('intranet/clientblock', views.clientblock, name='clientblock'),
     path('intranet/clientunblock', views.clientunblock, name='clientunblock'),
     path('intranet/appointments', views.appointments, name='appointments'),
+    path('list_accepted', views.list_accepted, name='list_accepted'),
+    path('list_denied', views.list_accepted, name='list_accepted'),
+    path('list_waiting', views.list_accepted, name='list_accepted')
 ]

@@ -13,13 +13,37 @@ from website.models import UserProfileInfo
 from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.contrib.auth.models import User
+from .models import Ticket
+import logging
 
 
-
-
+logger = logging.getLogger(__name__)
 
 def index(request):
     return render(request,'website/index.html')
+def list_accepted(request):
+    accepted_tickets = Ticket.objects.filter(tag='Accepted')
+    return render(request, 'list_accepted.html', {'accepted': accepted_tickets})
+def list_waiting(request):
+    waiting_tickets = Ticket.objects.filter(tag='Waiting')
+    return render(request, 'list_waiting.html', {'waiting': waiting_tickets})
+def list_denied(request):
+    denied_tickets = Ticket.objects.filter(tag='Denied')
+    return render(request, 'list_denied.html', {'denied': waiting_tickets})
+def answer(request, id):
+    ticket = Ticket.objects.get(id=id)
+    return render(request, 'answer.html', {'ticket': ticket})
+def update_accept(request, id):
+    logger.debug(request)
+    waiting_tickets = Ticket.objects.filter(tag='Waiting')
+    return redirect(request, '/website/intranet', {'waiting': waiting_tickets})
+def update_denie(request, id):
+    logger.debug(request)
+    waiting_tickets = Ticket.objects.filter(tag='Waiting')
+    return redirect(request, '/website/intranet', {'waiting': waiting_tickets})
+    #return render(request, 'list_waiting.html', {'waiting': waiting_tickets})
+   # ticket = Ticket.objects.get(id=id)
+   # return render(request, 'answer.html', {'ticket': ticket})   
 @login_required
 def special(request):
     return HttpResponse("You are logged in !")

@@ -1,0 +1,54 @@
+{% extends 'website/base.html' %}
+{% block body_block %}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/tickets/list_waiting">Tickets</a></li>
+    <li class="breadcrumb-item active">Resolving</li>
+</ol>
+<h1 class="display-4">Resolve a ticket</h1>
+
+<form method="post" action="/tickets/update/<%= ticket.id %>">
+    {% csrf_token %}
+    <div class="form-group">
+        <input type="hidden" name="mail" value="<%= ticket.client_mail %>">
+    </div>
+    <div class="form-group">
+        <label for="title">Id</label>
+        <p name="tag" class="form-control">{{ticket.id}}</p>
+    </div>
+    <div class="form-group">
+        <img src="data:image/png;base64,<%= ticket.image%>">
+    </div>
+    <div class="form-group">
+        <label for="body">Address</label>
+        <p class="form-control">{{ ticket.address }}</p>
+        <input type="hidden" name="address" value="<%= ticket.address %>">
+    </div>
+    <div class="form-group">
+        <label for="body">Direction</label>
+        <p name="direction" class="form-control">{{ ticket.direction }}</p>
+    </div>
+    <div class="form-group">
+        <label for="body">Comment</label>
+        <textarea name="admin_comment" class="form-control">{{ ticket.admin_comment }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="body">Date of Appointment</label>
+        <input type="date" name="date">
+    </div>
+    <div class="form-group">
+        <label for="body">Beginning hour</label>
+        <input type="time" name="time_start">
+    </div>
+    <div class="form-group">
+        <label for="body">Finishing hour</label>
+        <input type="time" name="time_end">
+    </div>
+    <div class="form-group">
+        <iframe src="https://calendar.google.com/calendar/b/1/embed?showPrint=0&amp;showTz=0&amp;height=600&amp;wkst=2&amp;hl=fr&amp;bgcolor=%23FFFFFF&amp;src=bobgraffiti.sigl%40gmail.com&amp;color=%231B887A&amp;ctz=Europe%2FParis" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+    </div>
+    <input type="submit" formaction="/update/accept/{{ticket.id}}" value="Accept" class="btn btn-success">
+    <input type="submit" formaction="/update/denie/{{ticket.id}}" value="Refuse" class="btn btn-danger">
+</form>
+{% endblock %}
