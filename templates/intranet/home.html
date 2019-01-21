@@ -1,16 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>{% block title %}Bob Graffiti Intranet{% endblock %}</title>
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Bob Graffiti Intranet{% endblock %}</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
-<body>
-  <main>
-    {% block content %}
-    <h1>Bob Graffiti Intranet</h1>
-    <a href="{% url 'website:clients' %}">Clients</a>
-    <a href="{% url 'website:appointments' %}">Appointments</a>
+  <body>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <ul class="nav navbar-nav">
+          <li><a class="navbar-link" href="{% url 'website:clients' %}">Clients</a></li>
+          <li><a class="navbar-link" href="{% url 'website:appointments' %}">Appointments</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% endif %}
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+    {% block body_block %}
+    <div class="container">
+            <div class="jumbotron">
+              <h1>Welcome to BOB Grafitti Intranet! </h1>
+            </div>
+    </div>
     {% endblock %}
-  </main>
-</body>
+    </div>
+  </body>
 </html>
