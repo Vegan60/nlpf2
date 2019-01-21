@@ -36,6 +36,7 @@ class Ticket(models.Model):
         ('East', 'EAST'),
         ('West', 'WEST'),
     )
+    id = models.AutoField(primary_key=True)
     client_mail = models.EmailField(null=True)
     address = models.TextField(null=True)
     country = CountryField(blank_label='Select country', null=True)

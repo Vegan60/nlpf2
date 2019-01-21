@@ -32,7 +32,7 @@
       <li>
           <a><td>{{ ticket.tag }}</td> - ({{ticket.email}}) - {{ ticket.address }} - {{ ticket.country }} - {{ ticket.direction }}</a>
           <input type="submit" name="" value="Accept">
-              <input type="hidden" name="tag" value={{ ticket.tag }}>
+              <input type="hidden" name="tag" value={{ ticket.id }}>
 
       </li>
         {% endif %}

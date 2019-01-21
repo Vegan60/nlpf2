@@ -123,7 +123,7 @@ def clientblock(request):
 @login_required
 def ticketaccept(request):
     ticket_tag = request.POST.get('tag')
-    ticket_ = Ticket.objects.get(tag=ticket_tag)
+    ticket_ = Ticket.objects.get(id=ticket_tag)
     ticket_.status = 'Accepted'
     ticket_.save(update_fields=['status'])
     return redirect('/website/intranet/appointments')
