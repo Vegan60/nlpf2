@@ -3,10 +3,11 @@ from django.shortcuts import render
 # Create your views here.
 
 from django.shortcuts import render
-from website.forms import UserForm,UserProfileInfoForm
+from website.forms import UserForm,UserProfileInfoForm, AddNewTicketForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import *
 from django.urls import reverse
+import datetime
 #from django.views.generic import TemplateView
 #from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -67,6 +68,30 @@ def user_login(request):
 
 def intranet(request):
     return render(request, 'intranet/home.html', locals())
+
+@login_required
+def user_create_ticket(request):
+    if request.method == 'POST':
+        ticket_form = AddNewTicketForm(data=request.POST)
+        if ticket_form.is_valid():
+            now = datetime.date.today()
+            ticket = ticket_form.save(commit=False)
+            ticket.tag = now.strftime('%Y-%m-%d %H:%M') +request.user.email
+            ticket.client_mail = request.user.email
+            print(ticket.tag)
+            if 'image' in request.FILES:
+                print('found it')
+                ticket.image = request.FILES['image']
+            ticket.save()
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            print(ticket_form.errors)
+    else:
+        ticket_form = AddNewTicketForm()
+    context = {'ticket_form' : ticket_form}
+    return render(request,'intranet/create_ticket.html',
+                          {'ticket_form' : ticket_form})
+
 
 def clients(request):
     return HttpResponse("Clients page")
