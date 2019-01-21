@@ -2,19 +2,23 @@ from django.shortcuts import render
 
 # Create your views here.
 
+
 from django.shortcuts import render, redirect
-from website.forms import UserForm,UserProfileInfoForm
+from website.forms import UserForm,UserProfileInfoForm, AddNewTicketForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import *
 from django.urls import reverse
-from website.models import UserProfileInfo
+from website.models import UserProfileInfo, Ticket
 #from django.views.generic import TemplateView
 #from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.contrib.auth.models import User
+
 from .models import Ticket
 import logging
+import datetime
+import django_tables2 as tables
 
 
 logger = logging.getLogger(__name__)
@@ -40,10 +44,7 @@ def update_accept(request, id):
 def update_denie(request, id):
     logger.debug(request)
     waiting_tickets = Ticket.objects.filter(tag='Waiting')
-    return redirect(request, '/website/intranet', {'waiting': waiting_tickets})
-    #return render(request, 'list_waiting.html', {'waiting': waiting_tickets})
-   # ticket = Ticket.objects.get(id=id)
-   # return render(request, 'answer.html', {'ticket': ticket})   
+    return redirect(request, '/website/intranet', {'waiting': waiting_tickets})  
 @login_required
 def special(request):
     return HttpResponse("You are logged in !")
@@ -102,6 +103,29 @@ def intranet(request):
     return render(request, 'intranet/home.html', locals())
 
 @login_required
+def user_create_ticket(request):
+    if request.method == 'POST':
+        ticket_form = AddNewTicketForm(data=request.POST)
+        if ticket_form.is_valid():
+            now = datetime.datetime.now()
+            ticket = ticket_form.save(commit=False)
+            ticket.tag = str(now) + " - " + request.user.email
+            ticket.client_mail = request.user.email
+            print(ticket.tag)
+            if 'image' in request.FILES:
+                print('found it')
+                ticket.image = request.FILES['image']
+            ticket.save()
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            print(ticket_form.errors)
+    else:
+        ticket_form = AddNewTicketForm()
+    context = {'ticket_form' : ticket_form}
+    return render(request,'intranet/create_ticket.html',
+                          {'ticket_form' : ticket_form})
+
+
 def clients(request):
     return HttpResponse("Clients page")
 
@@ -118,6 +142,14 @@ def clientblock(request):
     return redirect('/website/intranet/clients')
 
 @login_required
+def ticketaccept(request):
+    ticket_tag = request.POST.get('tag')
+    ticket_ = Ticket.objects.get(tag=ticket_tag)
+    ticket_.status = 'Accepted'
+    ticket_.save(update_fields=['status'])
+    return redirect('/website/intranet/appointments')
+
+@login_required
 def clientunblock(request):
     username_b = request.POST.get('username')
     user_c = User.objects.get(username=username_b)
@@ -130,4 +162,9 @@ class ClientListView(generic.ListView):
     model = User
     context_object_name = 'clients'
     template_name = 'intranet/clients.html'
+
+class TicketListView(generic.ListView):
+    model = Ticket
+    context_object_name = 'tickets'
+    template_name = 'intranet/tickets.html'
 

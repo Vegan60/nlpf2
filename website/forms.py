@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from website.models import UserProfileInfo
+from website.models import Ticket
 from django.contrib.auth.models import User
 
 class UserForm(ModelForm):
@@ -13,3 +14,10 @@ class UserProfileInfoForm(ModelForm):
   class Meta():
     model = UserProfileInfo
     fields = ('portfolio_site','profile_pic')
+
+class AddNewTicketForm(ModelForm):
+  class Meta():
+    model = Ticket
+    fields = ('address', 'country', 'direction', 'image')
+
+

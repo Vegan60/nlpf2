@@ -13,7 +13,7 @@
         {% for wai in waiting%}
             <tr>
                 <td>{{ wai.id}}</td>
-                <td>{{ wai.adress}}</td>
+                <td>{{ wai.address}}</td>
                 <td>
                     <form class="d-inline" action="answer/{{ wai.id }}" method="post">
                         {% csrf_token %}

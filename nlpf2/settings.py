@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_countries',
     'website'
 ]
 
@@ -57,7 +58,6 @@ ROOT_URLCONF = 'nlpf2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-
         'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -133,3 +134,4 @@ LOGIN_URL = '/website/user_login/'
 #TEMPLATE_DIRS = (
  #   BASE_DIR + '/templates/',
 #)
+
