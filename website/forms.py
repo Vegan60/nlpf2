@@ -18,6 +18,6 @@ class UserProfileInfoForm(ModelForm):
 class AddNewTicketForm(ModelForm):
   class Meta():
     model = Ticket
-    fields = ('address', 'country', 'direction', 'image', 'meeting_date', 'meeting_time_start')
+    fields = ('address', 'country', 'direction', 'image')
 
 

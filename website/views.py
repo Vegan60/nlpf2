@@ -8,13 +8,15 @@ from website.forms import UserForm,UserProfileInfoForm, AddNewTicketForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import *
 from django.urls import reverse
-from website.models import UserProfileInfo
+from website.models import UserProfileInfo, Ticket
 #from django.views.generic import TemplateView
 #from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.contrib.auth.models import User
 import datetime
+import django_tables2 as tables
+
 
 
 
@@ -84,9 +86,9 @@ def user_create_ticket(request):
     if request.method == 'POST':
         ticket_form = AddNewTicketForm(data=request.POST)
         if ticket_form.is_valid():
-            now = datetime.date.today()
+            now = datetime.datetime.now()
             ticket = ticket_form.save(commit=False)
-            ticket.tag = now.strftime('%Y-%m-%d %H:%M') +request.user.email
+            ticket.tag = str(now) + " - " + request.user.email
             ticket.client_mail = request.user.email
             print(ticket.tag)
             if 'image' in request.FILES:
@@ -119,6 +121,14 @@ def clientblock(request):
     return redirect('/website/intranet/clients')
 
 @login_required
+def ticketaccept(request):
+    ticket_tag = request.POST.get('tag')
+    ticket_ = Ticket.objects.get(tag=ticket_tag)
+    ticket_.status = 'Accepted'
+    ticket_.save(update_fields=['status'])
+    return redirect('/website/intranet/appointments')
+
+@login_required
 def clientunblock(request):
     username_b = request.POST.get('username')
     user_c = User.objects.get(username=username_b)
@@ -131,4 +141,9 @@ class ClientListView(generic.ListView):
     model = User
     context_object_name = 'clients'
     template_name = 'intranet/clients.html'
+
+class TicketListView(generic.ListView):
+    model = Ticket
+    context_object_name = 'tickets'
+    template_name = 'intranet/tickets.html'
 

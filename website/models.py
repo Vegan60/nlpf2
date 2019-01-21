@@ -25,6 +25,7 @@ path_and_rename = PathAndRename("/img")
 
 
 class Ticket(models.Model):
+
     DIRECTION_CHOICES = (
         ('North', 'NORTH'),
         ('North East', 'NORTHEAST'),
@@ -50,6 +51,7 @@ class Ticket(models.Model):
     meeting_time_start = models.TextField(help_text='Please indicate the time of the appointment', null=True)
     meeting_time_end = models.TextField(null=True, blank=True)
     admin_comment = models.TextField(null=True)
+    status = models.TextField(default='Waiting')
 
 
 

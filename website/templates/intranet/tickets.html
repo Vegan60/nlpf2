@@ -22,11 +22,36 @@
     </nav>
     <div class="container">
     {% block body_block %}
-    <div class="container">
-            <div class="jumbotron">
-              <h1>Welcome to BOB Grafitti Intranet! </h1>
-            </div>
-    </div>
+  {% if tickets %}
+  <h1>Waiting Tickets</h1>
+   <ul>
+   <form method="post" action="{% url 'website:ticketaccept' %}">
+        {% csrf_token %}
+    {% for ticket in tickets %}
+        {% if ticket.status == 'Waiting' %}
+      <li>
+          <a><td>{{ ticket.tag }}</td> - ({{ticket.email}}) - {{ ticket.address }} - {{ ticket.country }} - {{ ticket.direction }}</a>
+          <input type="submit" name="" value="Accept">
+              <input type="hidden" name="tag" value={{ ticket.tag }}>
+
+      </li>
+        {% endif %}
+    {% endfor %}
+   </form>
+  </ul>
+  <h1>Accepted Tickets</h1>
+   <ul>
+       {% for ticket in tickets %}
+        {% if ticket.status == 'Accepted' %}
+      <li>
+          <a><td>{{ ticket.tag }}</td> - ({{ticket.email}}) - {{ ticket.address }} - {{ ticket.country }} - {{ ticket.direction }}</a>
+      </li>
+        {% endif %}
+    {% endfor %}
+  </ul>
+      {% else %}
+    <p>There are no tickets.</p>
+  {% endif %}
     {% endblock %}
     </div>
   </body>
